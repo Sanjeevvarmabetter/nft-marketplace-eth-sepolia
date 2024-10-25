@@ -56,6 +56,10 @@ export default function MyPurchases({ mergedContract, account }) {
               <Col key={idx} className="overflow-hidden">
                 <Card>
                   <Card.Img variant="top" src={item.image} />
+                  <h5 className="card-text">{item.name}</h5>
+
+                  <p className="card-text">{item.description}</p>
+
                   <Card.Footer>
                     {ethers.utils.formatEther(item.totalPrice)} ETH
                   </Card.Footer>

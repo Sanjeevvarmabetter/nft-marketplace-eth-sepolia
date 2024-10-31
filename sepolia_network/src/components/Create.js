@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { ethers } from "ethers";
 import { Row, Form, Button } from 'react-bootstrap';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+
 import axios from 'axios';
 
 const Create = ({ mergedContract }) => { 
@@ -36,8 +39,10 @@ const Create = ({ mergedContract }) => {
         const imageUrl = `https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}`;
         setImage(imageUrl);
         console.log(imageUrl);
+        NotificationManager.success('Image uploaded successfully');
       } catch (error) {
         console.log("Pinata image upload error: ", error);
+        NotificationManager.error('Image upload failed.pls try again');
       }
     }
   };
@@ -48,6 +53,7 @@ const Create = ({ mergedContract }) => {
 
   const createNFT = async () => {
     if (!image || !price || !name || !description) return;
+
 
     try {
       const metadata = {
@@ -71,6 +77,7 @@ const Create = ({ mergedContract }) => {
       await mintThenList(metadataUri);
     } catch (error) {
       console.log("Pinata metadata upload error: ", error);
+      NotificationManager.error('Metadata upload failed pls try again');
     }
   };
 
@@ -88,10 +95,11 @@ const Create = ({ mergedContract }) => {
         // await listTx.wait();
         
         console.log(`NFT Listed: Token ID ${tokenId} for price: ${price} ETH`);
-    } catch (error) {
+      NotificationManager.success(`NFT minted and listed Token ID: ${tokenId}`,'success');
+      } catch (error) {
         // Improved error handling
         console.error("Error in minting or listing NFT: ", error);
-        alert("An error occurred while minting or listing the NFT. Please check the console for details.");
+        NotificationManager.error('an error occured while minting or listing the NFT');
     }
 };
 
@@ -115,6 +123,8 @@ const Create = ({ mergedContract }) => {
           </div>
         </main>
       </div>
+      <NotificationContainer />
+
     </div>
   );
 };
